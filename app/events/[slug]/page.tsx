@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PublicShell } from "@/components/soyaal/public-shell";
-import { getEventBySlug } from "@/lib/site-data";
+import { getEventBySlug } from "@/lib/data/events";
 
 export default async function EventDetailPage({
   params,
@@ -9,7 +9,7 @@ export default async function EventDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
 
   if (!event) {
     notFound();

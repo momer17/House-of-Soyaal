@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { PublicShell } from "@/components/soyaal/public-shell";
-import { events } from "@/lib/site-data";
+import { getPublishedEvents } from "@/lib/data/events";
 
 export default async function EventsPage() {
+  const events = await getPublishedEvents();
+
   return (
     <PublicShell>
       <section className="section-space">

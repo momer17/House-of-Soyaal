@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PublicShell } from "@/components/soyaal/public-shell";
-import { getCourseBySlug } from "@/lib/site-data";
+import { getCourseBySlug } from "@/lib/data/courses";
 import { getViewerSession } from "@/lib/session";
 
 export default async function CourseDetailPage({
@@ -10,7 +10,7 @@ export default async function CourseDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const course = getCourseBySlug(slug);
+  const course = await getCourseBySlug(slug);
   const session = await getViewerSession();
 
   if (!course) {

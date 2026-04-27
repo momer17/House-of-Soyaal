@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { PublicShell } from "@/components/soyaal/public-shell";
-import { archiveItems } from "@/lib/site-data";
+import { getPublishedArchiveItems } from "@/lib/data/archive";
 
 export default async function ArchiveTeaserPage() {
+  const archiveItems = await getPublishedArchiveItems();
+
   return (
     <PublicShell>
       <section className="section-space">
