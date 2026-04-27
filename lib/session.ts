@@ -1,50 +1,70 @@
-import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import type { ViewerRole } from "@/lib/site-data";
+
+export type ViewerRole = "guest" | "member" | "admin";
 
 export interface ViewerSession {
+  id: string;
   role: ViewerRole;
   name: string;
   onboarded: boolean;
   subscriptionActive: boolean;
 }
 
-const ROLE_COOKIE = "house_of_soyaal_role";
-const NAME_COOKIE = "house_of_soyaal_name";
-const ONBOARD_COOKIE = "house_of_soyaal_onboarded";
-
 export async function getViewerSession(): Promise<ViewerSession> {
-  const cookieStore = await cookies();
-  const roleValue = cookieStore.get(ROLE_COOKIE)?.value;
-  const role: ViewerRole =
-    roleValue === "member" || roleValue === "admin" ? roleValue : "guest";
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      id: "",
+      role: "guest",
+      name: "Guest",
+      onboarded: false,
+      subscriptionActive: false,
+    };
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("name, role, subscription_status, onboarded")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile) {
+    return {
+      id: user.id,
+      role: "guest",
+      name: "Guest",
+      onboarded: false,
+      subscriptionActive: false,
+    };
+  }
 
   return {
-    role,
-    name:
-      cookieStore.get(NAME_COOKIE)?.value ??
-      (role === "admin" ? "Admin" : role === "member" ? "Asha" : "Guest"),
-    onboarded: cookieStore.get(ONBOARD_COOKIE)?.value !== "0",
-    subscriptionActive: role === "member" || role === "admin",
+    id: user.id,
+    role: profile.role as ViewerRole,
+    name: profile.name,
+    onboarded: profile.onboarded,
+    subscriptionActive:
+      profile.subscription_status === "active" || profile.role === "admin",
   };
 }
 
-export async function requireMember() {
+export async function requireMember(): Promise<ViewerSession> {
   const session = await getViewerSession();
-
-  if (session.role === "guest") {
+  if (session.role === "guest" || !session.subscriptionActive) {
     redirect("/signin");
   }
-
   return session;
 }
 
-export async function requireAdmin() {
+export async function requireAdmin(): Promise<ViewerSession> {
   const session = await getViewerSession();
-
   if (session.role !== "admin") {
-    redirect("/signin");
+    redirect("/app");
   }
-
   return session;
 }
