@@ -41,6 +41,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Relationships: [];
       };
       courses: {
         Row: {
@@ -76,6 +77,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["courses"]["Insert"]>;
+        Relationships: [];
       };
       modules: {
         Row: {
@@ -95,6 +97,15 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["modules"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "modules_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       lessons: {
         Row: {
@@ -130,6 +141,15 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["lessons"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey";
+            columns: ["module_id"];
+            isOneToOne: false;
+            referencedRelation: "modules";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       lesson_resources: {
         Row: {
@@ -153,6 +173,15 @@ export interface Database {
           order?: number;
         };
         Update: Partial<Database["public"]["Tables"]["lesson_resources"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "lesson_resources_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "lessons";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       enrollments: {
         Row: {
@@ -168,6 +197,22 @@ export interface Database {
           enrolled_at?: string;
         };
         Update: never;
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "enrollments_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       lesson_progress: {
         Row: {
@@ -187,6 +232,22 @@ export interface Database {
           completed_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["lesson_progress"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "lessons";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "lesson_progress_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       events: {
         Row: {
@@ -220,6 +281,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["events"]["Insert"]>;
+        Relationships: [];
       };
       archive_items: {
         Row: {
@@ -255,6 +317,7 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["archive_items"]["Insert"]>;
+        Relationships: [];
       };
       pdf_annotations: {
         Row: {
@@ -276,6 +339,22 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["pdf_annotations"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "pdf_annotations_archive_item_id_fkey";
+            columns: ["archive_item_id"];
+            isOneToOne: false;
+            referencedRelation: "archive_items";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pdf_annotations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       announcements: {
         Row: {
@@ -293,7 +372,20 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["announcements"]["Insert"]>;
+        Relationships: [];
       };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
   };
 }

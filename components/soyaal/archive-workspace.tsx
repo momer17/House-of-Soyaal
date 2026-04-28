@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { ArchiveItem } from "@/lib/site-data";
+interface ArchiveItemData {
+  id: string;
+  slug: string;
+  title: string;
+  poet: string | null;
+  era: string | null;
+  editorial_note: string | null;
+  passages: string[] | null;
+  tags: string[] | null;
+}
 
 interface Annotation {
   passage: string;
@@ -13,8 +22,9 @@ function getStorageKey(slug: string) {
   return `soyaal:archive:${slug}`;
 }
 
-export function ArchiveWorkspace({ item }: { item: ArchiveItem }) {
-  const [selectedPassage, setSelectedPassage] = useState(item.passages[0] ?? "");
+export function ArchiveWorkspace({ item }: { item: ArchiveItemData }) {
+  const passages = item.passages ?? [];
+  const [selectedPassage, setSelectedPassage] = useState(passages[0] ?? "");
   const [label, setLabel] = useState("Theme");
   const [note, setNote] = useState("");
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
@@ -48,13 +58,13 @@ export function ArchiveWorkspace({ item }: { item: ArchiveItem }) {
             <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Member reading workspace</p>
             <h1 className="display-font mt-2 text-4xl text-[var(--soy-brown-900)]">{item.title}</h1>
           </div>
-          <div className="tag">{item.pdfName}</div>
+          {item.era && <div className="tag">{item.era}</div>}
         </div>
 
-        <p className="mt-4 max-w-3xl text-sm leading-8 text-[var(--soy-ink-soft)]">{item.editorialNote}</p>
+        <p className="mt-4 max-w-3xl text-sm leading-8 text-[var(--soy-ink-soft)]">{item.editorial_note}</p>
 
         <div className="mt-6 grid gap-4">
-          {item.passages.map((passage, index) => {
+          {passages.map((passage, index) => {
             const isSelected = selectedPassage === passage;
             return (
               <button

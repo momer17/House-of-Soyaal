@@ -40,9 +40,7 @@ export async function POST(request: Request) {
   try {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
-      const userId =
-        (session.subscription_data as { metadata?: { supabase_user_id?: string } })
-          ?.metadata?.supabase_user_id ?? session.metadata?.supabase_user_id;
+      const userId = session.metadata?.supabase_user_id;
 
       if (userId && session.subscription) {
         await supabase

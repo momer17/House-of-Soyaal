@@ -1,13 +1,49 @@
+import Link from "next/link";
 import { signOut } from "@/app/actions";
-import { Logo } from "@/components/soyaal/logo";
-import { SideNav } from "@/components/soyaal/side-nav";
+import { IconNav } from "@/components/soyaal/icon-nav";
 import { requireMember } from "@/lib/session";
 
 const memberNav = [
-  { href: "/app", label: "Dashboard", shortLabel: "DB" },
-  { href: "/app/course/foundations-of-somali-poetry", label: "Course", shortLabel: "CR" },
-  { href: "/app/archive", label: "Archive", shortLabel: "AR" },
-  { href: "/app/account", label: "Account", shortLabel: "AC" },
+  {
+    href: "/app",
+    label: "Dashboard",
+    exact: true,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
+  },
+  {
+    href: "/app/course/foundations-of-somali-poetry",
+    label: "Course",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <polygon points="5 3 19 12 5 21 5 3" />
+      </svg>
+    ),
+  },
+  {
+    href: "/app/archive",
+    label: "Archive",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/app/account",
+    label: "Account",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
 ];
 
 export default async function MemberLayout({
@@ -15,22 +51,43 @@ export default async function MemberLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await requireMember();
+  await requireMember();
 
   return (
-    <div className="app-frame">
-      <aside className="app-sidebar">
-        <Logo href="/app" />
-        <div className="paper-card p-4">
-          <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Member</p>
-          <p className="mt-2 font-medium text-[var(--soy-brown-900)]">{session.name}</p>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Subscription active</p>
-        </div>
-        <SideNav items={memberNav} />
-        <div className="mt-auto space-y-3">
+    <div className="app-frame-slim">
+      <aside className="app-sidebar-slim">
+        {/* Logo mark only */}
+        <Link
+          href="/app"
+          aria-label="House of Soyaal dashboard"
+          className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(61,46,32,0.1)] bg-[var(--soy-brown-900)] text-[var(--soy-cream-100)] transition-opacity hover:opacity-85"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <polygon
+              points="10,2 12.4,7.6 18.5,8.1 14,12.3 15.6,18.3 10,15.1 4.4,18.3 6,12.3 1.5,8.1 7.6,7.6"
+              fill="currentColor"
+              opacity="0.92"
+            />
+          </svg>
+        </Link>
+
+        <div className="mx-auto mb-1 h-px w-8 bg-[var(--soy-border)]" />
+
+        <IconNav items={memberNav} />
+
+        <div className="mt-auto">
           <form action={signOut}>
-            <button className="button-secondary w-full" type="submit">
-              Sign out
+            <button
+              type="submit"
+              title="Sign out"
+              aria-label="Sign out"
+              className="sidebar-icon-link"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
             </button>
           </form>
         </div>

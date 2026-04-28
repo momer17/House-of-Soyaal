@@ -10,6 +10,7 @@ const adminNav = [
   { href: "/admin/lessons", label: "Lessons", shortLabel: "LE" },
   { href: "/admin/events", label: "Events", shortLabel: "EV" },
   { href: "/admin/archive", label: "Archive", shortLabel: "AR" },
+  { href: "/admin/announcements", label: "Announcements", shortLabel: "AN" },
 ];
 
 export default async function AdminLayout({

@@ -26,15 +26,15 @@ export default async function EventDetailPage({
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="metric-card">
                 <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">When</p>
-                <p className="mt-2 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.datetimeLabel}</p>
+                <p className="mt-2 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.datetime_label}</p>
               </div>
               <div className="metric-card">
                 <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Where</p>
-                <p className="mt-2 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.locationLabel}</p>
+                <p className="mt-2 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.location_label}</p>
               </div>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a className="button-primary warm" href={event.eventbriteUrl} target="_blank" rel="noreferrer">
+              <a className="button-primary warm" href={event.eventbrite_url} target="_blank" rel="noreferrer">
                 Book on Eventbrite
               </a>
               <Link className="button-secondary" href="/events">
@@ -45,8 +45,8 @@ export default async function EventDetailPage({
 
           <aside className="editorial-card p-6">
             <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Booking</p>
-            <h2 className="display-font mt-3 text-3xl text-[var(--soy-brown-900)]">{event.priceLabel}</h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.seatsLabel}</p>
+            <h2 className="display-font mt-3 text-3xl text-[var(--soy-brown-900)]">{event.price_label}</h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.seats_label}</p>
             <div className="paper-card mt-6 p-4 text-sm leading-7 text-[var(--soy-ink-soft)]">
               Registration is intentionally routed out to Eventbrite for v1. The site keeps discovery and context on-brand,
               while ticketing remains operationally simple.

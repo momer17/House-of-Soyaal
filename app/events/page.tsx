@@ -21,14 +21,14 @@ export default async function EventsPage() {
               <article key={event.id} className="editorial-card p-6">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">{event.format}</p>
-                  <span className="tag">{event.priceLabel}</span>
+                  <span className="tag">{event.price_label}</span>
                 </div>
                 <h2 className="display-font mt-3 text-2xl text-[var(--soy-brown-900)]">{event.title}</h2>
                 <p className="mt-3 text-sm leading-7 text-[var(--soy-ink-soft)]">{event.summary}</p>
                 <div className="mt-5 space-y-2 text-sm text-[var(--soy-ink-soft)]">
-                  <p>{event.datetimeLabel}</p>
-                  <p>{event.locationLabel}</p>
-                  <p>{event.seatsLabel}</p>
+                  <p>{event.datetime_label}</p>
+                  <p>{event.location_label}</p>
+                  <p>{event.seats_label}</p>
                 </div>
                 <Link className="button-link mt-5 text-sm" href={`/events/${event.slug}`}>
                   Open event page

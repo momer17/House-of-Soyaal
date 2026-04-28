@@ -1,6 +1,26 @@
-import { archiveItems, events, flagshipCourse, seedUsers } from "@/lib/site-data";
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
-export default function AdminOverviewPage() {
+export default async function AdminOverviewPage() {
+  const [supabase, adminSupabase] = [await createClient(), createAdminClient()];
+
+  const [
+    { count: userCount },
+    { count: lessonCount },
+    { count: eventCount },
+    { count: archiveCount },
+    { count: activeSubCount },
+  ] = await Promise.all([
+    adminSupabase.from("profiles").select("*", { count: "exact", head: true }),
+    supabase.from("lessons").select("*", { count: "exact", head: true }),
+    supabase.from("events").select("*", { count: "exact", head: true }).eq("published", true),
+    supabase.from("archive_items").select("*", { count: "exact", head: true }),
+    adminSupabase
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .eq("subscription_status", "active"),
+  ]);
+
   return (
     <div className="space-y-6">
       <section className="top-panel">
@@ -14,19 +34,23 @@ export default function AdminOverviewPage() {
 
       <section className="metric-grid">
         <div className="metric-card">
-          <div className="metric-value">{seedUsers.length}</div>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Visible users</p>
+          <div className="metric-value">{userCount ?? 0}</div>
+          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Total members</p>
         </div>
         <div className="metric-card">
-          <div className="metric-value">{flagshipCourse.modules.length}</div>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Modules configured</p>
+          <div className="metric-value">{activeSubCount ?? 0}</div>
+          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Active subscriptions</p>
         </div>
         <div className="metric-card">
-          <div className="metric-value">{events.length}</div>
+          <div className="metric-value">{lessonCount ?? 0}</div>
+          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Lessons configured</p>
+        </div>
+        <div className="metric-card">
+          <div className="metric-value">{eventCount ?? 0}</div>
           <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Published events</p>
         </div>
         <div className="metric-card">
-          <div className="metric-value">{archiveItems.length}</div>
+          <div className="metric-value">{archiveCount ?? 0}</div>
           <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Archive entries</p>
         </div>
       </section>

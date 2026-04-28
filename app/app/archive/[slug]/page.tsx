@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { ArchiveWorkspace } from "@/components/soyaal/archive-workspace";
-import { getArchiveItemBySlug } from "@/lib/site-data";
+import { getArchiveItemBySlug } from "@/lib/data/archive";
 import { requireMember } from "@/lib/session";
 
 export default async function ArchiveDetailPage({
@@ -10,7 +10,7 @@ export default async function ArchiveDetailPage({
 }) {
   await requireMember();
   const { slug } = await params;
-  const item = getArchiveItemBySlug(slug);
+  const item = await getArchiveItemBySlug(slug);
 
   if (!item || item.access !== "members") {
     notFound();

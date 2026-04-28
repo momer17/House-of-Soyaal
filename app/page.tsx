@@ -12,99 +12,125 @@ export default async function HomePage() {
     getPublishedArchiveItems(),
   ]);
 
-  // Fallback values for when DB is not yet seeded
   const courseTitle = course?.title ?? "Foundations of Somali Poetry";
   const courseSlug = course?.slug ?? "foundations-of-somali-poetry";
   const heroQuote =
     course?.hero_quote ??
     "A course shaped like a reading circle: attentive, warm, and grounded in the living oral tradition.";
-  const heroStats = (course?.hero_stats as Array<{ value: string; label: string }>) ?? [
-    { value: "9", label: "Lessons in the pilot course" },
-    { value: "3", label: "Live sessions this term" },
-    { value: "12", label: "Archive PDFs at launch" },
-  ];
+
+  // First upcoming event for the announcement strip
+  const nextEvent = events[0] ?? null;
 
   return (
     <PublicShell>
+
+      {/* ── Announcement strip ─────────────────────────────────── */}
+      {nextEvent && (
+        <div className="bg-[var(--soy-brown-900)] py-2.5 text-center text-xs text-[var(--soy-cream-200)]">
+          <span className="mr-2 opacity-70">New workshop</span>
+          <span className="font-medium text-[var(--soy-amber-300)]">{nextEvent.title}</span>
+          {nextEvent.datetime_label && (
+            <span className="mx-2 opacity-50">·</span>
+          )}
+          {nextEvent.datetime_label && (
+            <span className="opacity-70">{nextEvent.datetime_label.split(",")[0]}</span>
+          )}
+          <Link
+            href={`/events/${nextEvent.slug}`}
+            className="ml-3 font-semibold text-[var(--soy-amber-300)] underline underline-offset-2 hover:text-white"
+          >
+            Book now →
+          </Link>
+        </div>
+      )}
+
+      {/* ── Hero ───────────────────────────────────────────────── */}
       <section className="section-space">
         <div className="content-width grid gap-8 px-4 lg:grid-cols-[minmax(0,1.15fr)_28rem] lg:items-center">
-          <div className="relative overflow-hidden rounded-[2rem] border border-[rgba(61,46,32,0.08)] bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(247,241,232,0.96))] px-6 py-10 shadow-[var(--soy-shadow)] sm:px-10 sm:py-14">
-            <div className="mesh-glow opacity-70" />
-            <div className="relative z-10">
-              <p className="eyebrow">Somali language and poetry</p>
-              <h1 className="section-title mt-5 max-w-3xl">
-                A warm, editorial home for learning Somali through poetry, listening, and close reading.
-              </h1>
-              <p className="section-subtitle mt-6">
-                House of Soyaal launches with one carefully structured course, a member archive of poems and reading
-                materials, and a small calendar of live workshops designed to keep the learning intimate and usable.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link className="button-primary warm" href="/pricing">
-                  Join as a member
-                </Link>
-                <Link className="button-secondary" href={`/course/${courseSlug}`}>
-                  Explore the flagship course
-                </Link>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3 text-sm text-[var(--soy-ink-soft)]">
-                <span className="tag">UK-first launch</span>
-                <span className="tag">Single-course pilot</span>
-                <span className="tag">Archive + events included</span>
-              </div>
+          {/* Left: headline */}
+          <div>
+            <p className="eyebrow">Somali language and poetry</p>
+            <h1 className="hero-title mt-5 max-w-3xl">
+              A warm, editorial home for learning Somali through poetry, listening, and close reading.
+            </h1>
+            <p className="section-subtitle mt-6">
+              House of Soyaal launches with one carefully structured course, a member archive of poems and reading
+              materials, and a small calendar of live workshops designed to keep the learning intimate and usable.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link className="button-primary warm" href="/pricing">
+                Join as a member
+              </Link>
+              <Link className="button-secondary" href={`/course/${courseSlug}`}>
+                Explore the flagship course
+              </Link>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <span className="tag">UK-first launch</span>
+              <span className="tag">Single-course pilot</span>
+              <span className="tag">Archive + events included</span>
             </div>
           </div>
 
+          {/* Right: flagship course + dark quote card */}
           <aside className="space-y-4">
             <div className="editorial-card p-6">
               <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Flagship course</p>
               <h2 className="display-font mt-3 text-3xl text-[var(--soy-brown-900)]">{courseTitle}</h2>
               <p className="mt-3 text-sm leading-7 text-[var(--soy-ink-soft)]">{heroQuote}</p>
-              <div className="mt-6 space-y-3">
-                {heroStats.map((stat) => (
-                  <div key={stat.label} className="paper-card flex items-center justify-between p-4">
-                    <span className="display-font text-2xl text-[var(--soy-brown-900)]">{stat.value}</span>
-                    <span className="text-sm text-[var(--soy-ink-soft)]">{stat.label}</span>
+              <div className="mt-5 grid grid-cols-3 divide-x divide-[var(--soy-border)]">
+                {[
+                  { value: "9", label: "Lessons" },
+                  { value: "3", label: "Live sessions" },
+                  { value: "12", label: "Archive PDFs" },
+                ].map((stat) => (
+                  <div key={stat.label} className="px-3 first:pl-0 last:pr-0">
+                    <div className="display-font text-2xl text-[var(--soy-brown-900)]">{stat.value}</div>
+                    <div className="mt-0.5 text-xs text-[var(--soy-ink-muted)]">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="editorial-card bg-[linear-gradient(135deg,var(--soy-brown-900),var(--soy-brown-700))] p-6 text-[var(--soy-cream-100)]">
-              <p className="text-xs uppercase tracking-[0.14em] text-[var(--soy-amber-300)]">Member archive</p>
-              <p className="display-font mt-3 text-2xl leading-10">
+            {/* Dark espresso archive quote card */}
+            <div
+              className="editorial-card p-6 text-[var(--soy-cream-100)]"
+              style={{ background: "linear-gradient(135deg, #1a0f08, #2e1c0e 52%, #3d2918)" }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--soy-amber-300)]">From the archive</p>
+              <p className="display-font mt-3 text-xl leading-9 italic">
                 &ldquo;A name carried in the mouth can outlive the road that first taught it to us.&rdquo;
               </p>
-              <p className="mt-4 text-sm leading-7 text-white/70">
-                Preview the archive publicly, then annotate poems and save personal reading notes inside the member area.
-              </p>
+              <p className="mt-4 text-sm text-white/50">— Member archive preview</p>
             </div>
           </aside>
         </div>
       </section>
 
+      {/* ── Metrics strip ──────────────────────────────────────── */}
       <section className="content-width px-4 pb-10">
         <div className="metric-grid">
           <div className="metric-card">
             <div className="metric-value">1</div>
-            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Flagship course for the pilot launch</p>
+            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Flagship course for the pilot</p>
           </div>
           <div className="metric-card">
             <div className="metric-value">9</div>
-            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Structured lessons across three modules</p>
+            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Structured lessons</p>
           </div>
           <div className="metric-card">
             <div className="metric-value">{events.length || 3}</div>
-            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Live events across the current season</p>
+            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Live events this season</p>
           </div>
           <div className="metric-card">
             <div className="metric-value">12</div>
-            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Archive PDFs prepared for the first release</p>
+            <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Archive PDFs at launch</p>
           </div>
         </div>
       </section>
 
-      <section className="section-space bg-[rgba(247,241,232,0.78)]">
+      {/* ── What membership unlocks ────────────────────────────── */}
+      <section className="section-space bg-[var(--soy-cream-200)]">
         <div className="content-width px-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
@@ -140,6 +166,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── Learner view + events ──────────────────────────────── */}
       <section className="section-space">
         <div className="content-width grid gap-8 px-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
           <div className="editorial-card p-6 sm:p-8">
@@ -195,7 +222,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section-space bg-[rgba(247,241,232,0.78)]">
+      {/* ── Archive preview ────────────────────────────────────── */}
+      <section className="section-space bg-[var(--soy-cream-200)]">
         <div className="content-width px-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
