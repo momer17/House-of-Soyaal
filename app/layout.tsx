@@ -1,6 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter, Lora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "House of Soyaal",
@@ -25,14 +38,18 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#3D2E20",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="antialiased">
+    <html lang="en" className={`${inter.variable} ${lora.variable}`}>
+      <body className="antialiased bg-[var(--wh)]">
         {children}
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>

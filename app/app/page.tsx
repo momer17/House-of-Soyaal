@@ -38,107 +38,107 @@ export default async function DashboardPage() {
   const percentComplete = progress?.percentComplete ?? 0;
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-5">
       {!session.onboarded ? <OnboardingCard onComplete={completeOnboarding} /> : null}
 
-      {/* ── Floating greeting ──────────────────────────────────── */}
-      <div className="flex items-end justify-between gap-4 px-1 pt-2">
-        <h1 className="display-font text-4xl text-[var(--soy-brown-900)]">
+      {/* Greeting */}
+      <div className="flex items-end justify-between gap-4 px-1 pt-1">
+        <h1 className="font-serif text-[24px] text-[var(--br)]">
           Welcome back, {session.name.split(" ")[0]}
         </h1>
-        <p className="hidden text-sm text-[var(--soy-ink-muted)] md:block">
+        <p className="hidden text-[11px] text-[var(--tx3)] md:block">
           {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
         </p>
       </div>
 
-      {/* ── Metrics ────────────────────────────────────────────── */}
-      <section className="metric-grid">
-        <div className="metric-card">
-          <div className="metric-value">1</div>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Course enrolled</p>
+      {/* Metrics */}
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="bg-[var(--cr)] rounded-lg p-3 text-center border border-[var(--soy-border)]">
+          <div className="font-serif text-[22px] text-[var(--br)]">1</div>
+          <p className="mt-0.5 text-[10px] text-[var(--tx3)]">Course enrolled</p>
         </div>
-        <div className="metric-card">
-          <div className="metric-value">{percentComplete}%</div>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Course progress</p>
+        <div className="bg-[var(--cr)] rounded-lg p-3 text-center border border-[var(--soy-border)]">
+          <div className="font-serif text-[22px] text-[var(--br)]">{percentComplete}%</div>
+          <p className="mt-0.5 text-[10px] text-[var(--tx3)]">Progress</p>
         </div>
-        <div className="metric-card">
-          <div className="metric-value">{events.length}</div>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Upcoming events</p>
+        <div className="bg-[var(--cr)] rounded-lg p-3 text-center border border-[var(--soy-border)]">
+          <div className="font-serif text-[22px] text-[var(--br)]">{events.length}</div>
+          <p className="mt-0.5 text-[10px] text-[var(--tx3)]">Upcoming events</p>
         </div>
-        <div className="metric-card">
-          <div className="metric-value">{archiveItems.length}</div>
-          <p className="mt-1 text-sm text-[var(--soy-ink-soft)]">Archive entries</p>
-        </div>
-      </section>
-
-      {/* ── Dark espresso continue card ─────────────────────────── */}
-      <section className="continue-card">
-        <div className="mesh-glow opacity-30" />
-        <div className="relative z-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--soy-amber-300)]">
-            Continue where you left off
-          </p>
-          <p className="display-font mt-3 text-2xl italic leading-9 text-[var(--soy-cream-100)]">
-            {progress?.currentModuleTitle ?? "Foundations of Somali Poetry"} &middot;{" "}
-            {progress?.currentLessonTitle ?? "Listening for Repetition"}
-          </p>
-          <div className="mt-4">
-            <ProgressBar value={percentComplete} />
-          </div>
-          <div className="mt-2 flex items-center justify-between gap-4">
-            <p className="text-xs text-white/50">{percentComplete}% complete</p>
-            <Link
-              className="button-primary warm mt-3 text-sm"
-              href={`/app/lesson/${currentLessonSlug}`}
-            >
-              Resume lesson →
-            </Link>
-          </div>
+        <div className="bg-[var(--cr)] rounded-lg p-3 text-center border border-[var(--soy-border)]">
+          <div className="font-serif text-[22px] text-[var(--br)]">{archiveItems.length}</div>
+          <p className="mt-0.5 text-[10px] text-[var(--tx3)]">Archive entries</p>
         </div>
       </section>
 
-      {/* ── My courses + Upcoming events ───────────────────────── */}
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+      {/* Continue card */}
+      <section 
+        className="rounded-lg p-5 text-[var(--cr)] relative overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #1a0f08, #2e1c0e 52%, #3d2918)" }}
+      >
+        <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--am3)]">
+          Continue where you left off
+        </p>
+        <p className="font-serif mt-2 text-[18px] italic leading-[1.4] text-[var(--cr)]">
+          {progress?.currentModuleTitle ?? "Module Name"} &middot;{" "}
+          {progress?.currentLessonTitle ?? "Lesson Title"}
+        </p>
+        <div className="mt-3">
+          <ProgressBar value={percentComplete} />
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-4">
+          <p className="text-[10px] text-white/50">{percentComplete}% complete</p>
+          <Link
+            className="px-3 py-[6px] text-[11px] font-medium bg-[var(--am)] text-white rounded-md hover:bg-[var(--am2)] transition-colors"
+            href={`/app/lesson/${currentLessonSlug}`}
+          >
+            Resume lesson
+          </Link>
+        </div>
+      </section>
+
+      {/* My courses + Upcoming events */}
+      <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
 
         {/* Courses list */}
-        <div className="top-panel">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">My courses</p>
-          <div className="mt-5 space-y-5">
+        <div className="bg-[var(--cr)] rounded-lg p-4 border border-[var(--soy-border)]">
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--tx3)]">My courses</p>
+          <div className="mt-4 space-y-4">
             {[
-              { title: "Foundations of Somali Poetry", module: "Listening for Form", percent: percentComplete, accent: "var(--soy-amber-600)" },
+              { title: "Course Title Placeholder", module: "Module Name", percent: percentComplete, accent: "var(--am)" },
             ].map((course) => (
               <div key={course.title}>
                 <div className="flex items-center gap-3">
                   <div
-                    className="h-10 w-1 flex-shrink-0 rounded-full"
+                    className="h-8 w-1 flex-shrink-0 rounded-full"
                     style={{ background: course.accent }}
                   />
                   <div className="min-w-0 flex-1">
                     <Link
                       href={`/app/course/${COURSE_SLUG}`}
-                      className="font-medium text-[var(--soy-brown-900)] hover:text-[var(--soy-amber-600)] transition-colors"
+                      className="text-[13px] font-medium text-[var(--br)] hover:text-[var(--am)] transition-colors"
                     >
                       {course.title}
                     </Link>
-                    <p className="mt-0.5 text-xs text-[var(--soy-ink-muted)]">{course.percent}% complete</p>
+                    <p className="mt-0.5 text-[10px] text-[var(--tx3)]">{course.percent}% complete</p>
                   </div>
                 </div>
-                <div className="ml-4 mt-2.5">
+                <div className="ml-4 mt-2">
                   <ProgressBar value={course.percent} />
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Announcements inside the courses panel */}
+          {/* Announcements */}
           {announcements.length > 0 && (
-            <div className="mt-6 border-t border-[var(--soy-border)] pt-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Announcements</p>
-              <div className="mt-3 space-y-3">
+            <div className="mt-4 border-t border-[var(--soy-border)] pt-4">
+              <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--tx3)]">Announcements</p>
+              <div className="mt-2 space-y-2">
                 {announcements.map((ann) => (
-                  <div key={ann.id} className="paper-card p-4">
-                    <h3 className="font-medium text-[var(--soy-brown-900)]">{ann.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-[var(--soy-ink-soft)]">{ann.body}</p>
+                  <div key={ann.id} className="bg-[var(--wh)] rounded-md p-3 border border-[var(--soy-border)]">
+                    <h3 className="text-[12px] font-medium text-[var(--br)]">{ann.title}</h3>
+                    <p className="mt-1 text-[11px] leading-[1.5] text-[var(--tx2)]">{ann.body}</p>
                   </div>
                 ))}
               </div>
@@ -146,15 +146,15 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        {/* Upcoming events with date blocks */}
-        <div className="top-panel">
+        {/* Upcoming events */}
+        <div className="bg-[var(--cr)] rounded-lg p-4 border border-[var(--soy-border)]">
           <div className="flex items-center justify-between gap-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Upcoming events</p>
-            <Link className="button-link text-xs" href="/events">View all</Link>
+            <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--tx3)]">Upcoming events</p>
+            <Link className="text-[11px] font-medium text-[var(--am)] hover:underline" href="/events">View all</Link>
           </div>
-          <div className="mt-4 space-y-3">
+          <div className="mt-3 space-y-2">
             {events.length === 0 ? (
-              <p className="text-sm text-[var(--soy-ink-muted)]">No upcoming events scheduled.</p>
+              <p className="text-[11px] text-[var(--tx3)]">No upcoming events scheduled.</p>
             ) : (
               events.map((event) => {
                 const parsed = parseEventDate(event.event_date);
@@ -162,25 +162,25 @@ export default async function DashboardPage() {
                   <Link
                     key={event.id}
                     href={`/events/${event.slug}`}
-                    className="paper-card flex items-start gap-4 p-4 transition-shadow hover:shadow-md"
+                    className="bg-[var(--wh)] rounded-md flex items-start gap-3 p-3 border border-[var(--soy-border)] transition-shadow hover:shadow-sm"
                   >
                     {parsed ? (
-                      <div className="event-date">
-                        <span className="event-date-day">{parsed.day}</span>
-                        <span className="event-date-month">{parsed.month}</span>
+                      <div className="w-10 h-10 bg-[var(--br)] text-[var(--cr)] rounded-md flex flex-col items-center justify-center flex-shrink-0">
+                        <span className="text-[12px] font-medium leading-none">{parsed.day}</span>
+                        <span className="text-[8px] uppercase tracking-wider opacity-70">{parsed.month}</span>
                       </div>
                     ) : (
-                      <div className="event-date">
-                        <span className="event-date-day text-sm">—</span>
+                      <div className="w-10 h-10 bg-[var(--br)] text-[var(--cr)] rounded-md flex items-center justify-center flex-shrink-0">
+                        <span className="text-[10px]">—</span>
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-medium text-[var(--soy-brown-900)]">{event.title}</h3>
-                      <p className="mt-0.5 text-xs text-[var(--soy-ink-soft)]">
+                      <h3 className="text-[12px] font-medium text-[var(--br)]">{event.title}</h3>
+                      <p className="mt-0.5 text-[10px] text-[var(--tx3)]">
                         {event.location_label} · {event.datetime_label?.split(",")[1]?.trim() ?? ""}
                       </p>
                       {event.price_label && (
-                        <span className="mt-2 inline-block tag">{event.price_label}</span>
+                        <span className="mt-1 inline-block px-2 py-0.5 text-[9px] bg-[var(--cr)] text-[var(--tx3)] rounded">{event.price_label}</span>
                       )}
                     </div>
                   </Link>
@@ -191,25 +191,25 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {/* ── Archive picks ──────────────────────────────────────── */}
-      <section className="top-panel">
+      {/* Archive picks */}
+      <section className="bg-[var(--cr)] rounded-lg p-4 border border-[var(--soy-border)]">
         <div className="flex items-center justify-between gap-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--soy-ink-muted)]">Archive picks</p>
-          <Link className="button-link text-xs" href="/app/archive">Open archive</Link>
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--tx3)]">Archive picks</p>
+          <Link className="text-[11px] font-medium text-[var(--am)] hover:underline" href="/app/archive">Open archive</Link>
         </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
           {archiveItems
             .filter((item) => item.access === "members")
             .slice(0, 3)
             .map((item) => (
               <Link
                 key={item.id}
-                className="paper-card block p-4"
+                className="bg-[var(--wh)] rounded-md block p-3 border border-[var(--soy-border)] hover:shadow-sm transition-shadow"
                 href={`/app/archive/${item.slug}`}
               >
-                <p className="text-xs uppercase tracking-[0.1em] text-[var(--soy-ink-muted)]">{item.poet}</p>
-                <h3 className="mt-1 font-medium text-[var(--soy-brown-900)]">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--soy-ink-soft)] line-clamp-2">{item.preview}</p>
+                <p className="text-[9px] uppercase tracking-[0.1em] text-[var(--am)]">{item.poet}</p>
+                <h3 className="mt-1 text-[12px] font-medium text-[var(--br)]">{item.title}</h3>
+                <p className="mt-1 text-[10px] leading-[1.5] text-[var(--tx2)] line-clamp-2">{item.preview}</p>
               </Link>
             ))}
         </div>
